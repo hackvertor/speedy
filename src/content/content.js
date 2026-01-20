@@ -131,6 +131,21 @@ function initSpeedyReader(wpm) {
         color: #4a6fa5;
         font-size: 14px;
       }
+      #speedy-credit {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 12px;
+      }
+      #speedy-credit a {
+        color: #4a6fa5;
+        text-decoration: none;
+      }
+      #speedy-credit a:hover {
+        color: #ff6b35;
+        text-decoration: underline;
+      }
     `;
     overlay.appendChild(style);
 
@@ -181,6 +196,17 @@ function initSpeedyReader(wpm) {
     wpmDisplay.id = 'speedy-wpm-display';
     wpmDisplay.textContent = '300 WPM';
     overlay.appendChild(wpmDisplay);
+
+    // Create credit link
+    const credit = document.createElement('div');
+    credit.id = 'speedy-credit';
+    const creditLink = document.createElement('a');
+    creditLink.href = 'https://garethheyes.co.uk/';
+    creditLink.target = '_blank';
+    creditLink.rel = 'noopener noreferrer';
+    creditLink.textContent = 'made by Gareth Heyes';
+    credit.appendChild(creditLink);
+    overlay.appendChild(credit);
 
     document.body.appendChild(overlay);
 
