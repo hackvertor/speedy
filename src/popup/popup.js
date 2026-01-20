@@ -22,7 +22,7 @@ readBtn.addEventListener('click', async () => {
 
   await chrome.scripting.executeScript({
     target: { tabId: tab.id },
-    files: ['content.js']
+    files: ['src/content/content.js']
   });
 
   await chrome.tabs.sendMessage(tab.id, {
