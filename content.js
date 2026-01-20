@@ -32,113 +32,153 @@ function initSpeedyReader(wpm) {
   function createOverlay() {
     overlay = document.createElement('div');
     overlay.id = 'speedy-overlay';
-    overlay.innerHTML = `
-      <style>
-        #speedy-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(135deg, #0a1628 0%, #1a2a4a 50%, #0d1f3c 100%);
-          z-index: 2147483647;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
-        }
-        #speedy-word-container {
-          position: relative;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          min-width: 600px;
-          height: 120px;
-        }
-        #speedy-focus-line-top,
-        #speedy-focus-line-bottom {
-          position: absolute;
-          width: 3px;
-          background: linear-gradient(180deg, #ff6b35 0%, #e63946 100%);
-          box-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
-          left: 50%;
-          transform: translateX(-50%);
-        }
-        #speedy-focus-line-top {
-          top: 0;
-          height: 25px;
-        }
-        #speedy-focus-line-bottom {
-          bottom: 0;
-          height: 25px;
-        }
-        #speedy-word {
-          position: relative;
-          font-size: 64px;
-          color: #fff;
-          letter-spacing: 2px;
-          white-space: nowrap;
-          margin-top: -8px;
-        }
-        #speedy-word .before {
-          color: #fff;
-        }
-        #speedy-word .focus {
-          color: #ff6b35;
-          text-shadow: 0 0 8px rgba(255, 107, 53, 0.6);
-        }
-        #speedy-word .after {
-          color: #fff;
-        }
-        #speedy-controls {
-          margin-top: 60px;
-          display: flex;
-          gap: 20px;
-        }
-        .speedy-btn {
-          background: rgba(0, 180, 216, 0.1);
-          color: #fff;
-          border: 2px solid #00b4d8;
-          padding: 12px 24px;
-          font-size: 16px;
-          border-radius: 8px;
-          cursor: pointer;
-          transition: all 0.2s;
-        }
-        .speedy-btn:hover {
-          background: #00b4d8;
-          box-shadow: 0 0 15px rgba(0, 180, 216, 0.4);
-        }
-        #speedy-progress {
-          position: absolute;
-          bottom: 50px;
-          left: 50%;
-          transform: translateX(-50%);
-          color: #4a6fa5;
-          font-size: 14px;
-        }
-        #speedy-wpm-display {
-          position: absolute;
-          bottom: 30px;
-          left: 50%;
-          transform: translateX(-50%);
-          color: #4a6fa5;
-          font-size: 14px;
-        }
-      </style>
-      <div id="speedy-word-container">
-        <div id="speedy-focus-line-top"></div>
-        <div id="speedy-focus-line-bottom"></div>
-        <div id="speedy-word">Ready</div>
-      </div>
-      <div id="speedy-controls">
-        <button class="speedy-btn" id="speedy-pause">Pause</button>
-        <button class="speedy-btn" id="speedy-close">Close</button>
-      </div>
-      <div id="speedy-progress">0 / 0</div>
-      <div id="speedy-wpm-display">300 WPM</div>
+
+    // Create and append style element
+    const style = document.createElement('style');
+    style.textContent = `
+      #speedy-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #0a1628 0%, #1a2a4a 50%, #0d1f3c 100%);
+        z-index: 2147483647;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
+      }
+      #speedy-word-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 600px;
+        height: 120px;
+      }
+      #speedy-focus-line-top,
+      #speedy-focus-line-bottom {
+        position: absolute;
+        width: 3px;
+        background: linear-gradient(180deg, #ff6b35 0%, #e63946 100%);
+        box-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      #speedy-focus-line-top {
+        top: 0;
+        height: 25px;
+      }
+      #speedy-focus-line-bottom {
+        bottom: 0;
+        height: 25px;
+      }
+      #speedy-word {
+        position: relative;
+        font-size: 64px;
+        color: #fff;
+        letter-spacing: 2px;
+        white-space: nowrap;
+        margin-top: -8px;
+      }
+      #speedy-word .before {
+        color: #fff;
+      }
+      #speedy-word .focus {
+        color: #ff6b35;
+        text-shadow: 0 0 8px rgba(255, 107, 53, 0.6);
+      }
+      #speedy-word .after {
+        color: #fff;
+      }
+      #speedy-controls {
+        margin-top: 60px;
+        display: flex;
+        gap: 20px;
+      }
+      .speedy-btn {
+        background: rgba(0, 180, 216, 0.1);
+        color: #fff;
+        border: 2px solid #00b4d8;
+        padding: 12px 24px;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .speedy-btn:hover {
+        background: #00b4d8;
+        box-shadow: 0 0 15px rgba(0, 180, 216, 0.4);
+      }
+      #speedy-progress {
+        position: absolute;
+        bottom: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #4a6fa5;
+        font-size: 14px;
+      }
+      #speedy-wpm-display {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #4a6fa5;
+        font-size: 14px;
+      }
     `;
+    overlay.appendChild(style);
+
+    // Create word container
+    const wordContainer = document.createElement('div');
+    wordContainer.id = 'speedy-word-container';
+
+    const focusLineTop = document.createElement('div');
+    focusLineTop.id = 'speedy-focus-line-top';
+    wordContainer.appendChild(focusLineTop);
+
+    const focusLineBottom = document.createElement('div');
+    focusLineBottom.id = 'speedy-focus-line-bottom';
+    wordContainer.appendChild(focusLineBottom);
+
+    const wordEl = document.createElement('div');
+    wordEl.id = 'speedy-word';
+    wordEl.textContent = 'Ready';
+    wordContainer.appendChild(wordEl);
+
+    overlay.appendChild(wordContainer);
+
+    // Create controls
+    const controls = document.createElement('div');
+    controls.id = 'speedy-controls';
+
+    const pauseBtn = document.createElement('button');
+    pauseBtn.className = 'speedy-btn';
+    pauseBtn.id = 'speedy-pause';
+    pauseBtn.textContent = 'Pause';
+    controls.appendChild(pauseBtn);
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'speedy-btn';
+    closeBtn.id = 'speedy-close';
+    closeBtn.textContent = 'Close';
+    controls.appendChild(closeBtn);
+
+    overlay.appendChild(controls);
+
+    // Create progress and WPM display
+    const progress = document.createElement('div');
+    progress.id = 'speedy-progress';
+    progress.textContent = '0 / 0';
+    overlay.appendChild(progress);
+
+    const wpmDisplay = document.createElement('div');
+    wpmDisplay.id = 'speedy-wpm-display';
+    wpmDisplay.textContent = '300 WPM';
+    overlay.appendChild(wpmDisplay);
+
     document.body.appendChild(overlay);
 
     document.getElementById('speedy-pause').addEventListener('click', togglePause);
@@ -174,7 +214,22 @@ function initSpeedyReader(wpm) {
     const after = word.slice(focusIndex + 1);
 
     const wordEl = document.getElementById('speedy-word');
-    wordEl.innerHTML = `<span class="before">${before}</span><span class="focus">${focus}</span><span class="after">${after}</span>`;
+    wordEl.textContent = '';
+
+    const beforeSpan = document.createElement('span');
+    beforeSpan.className = 'before';
+    beforeSpan.textContent = before;
+    wordEl.appendChild(beforeSpan);
+
+    const focusSpan = document.createElement('span');
+    focusSpan.className = 'focus';
+    focusSpan.textContent = focus;
+    wordEl.appendChild(focusSpan);
+
+    const afterSpan = document.createElement('span');
+    afterSpan.className = 'after';
+    afterSpan.textContent = after;
+    wordEl.appendChild(afterSpan);
 
     // Move word so the focus letter is centered on the fixed line
     requestAnimationFrame(() => {
@@ -222,7 +277,7 @@ function initSpeedyReader(wpm) {
       currentWordIndex++;
       if (currentWordIndex >= words.length) {
         clearInterval(intervalId);
-        document.getElementById('speedy-word').innerHTML = '<span style="color:#ff6b35;text-shadow:0 0 8px rgba(255,107,53,0.6)">Done!</span>';
+        showDoneMessage();
         document.getElementById('speedy-pause').textContent = 'Restart';
         isReading = false;
         return;
@@ -230,6 +285,16 @@ function initSpeedyReader(wpm) {
 
       displayWord(words[currentWordIndex]);
     }, interval);
+  }
+
+  function showDoneMessage() {
+    const wordEl = document.getElementById('speedy-word');
+    wordEl.textContent = '';
+    const doneSpan = document.createElement('span');
+    doneSpan.style.color = '#ff6b35';
+    doneSpan.style.textShadow = '0 0 8px rgba(255,107,53,0.6)';
+    doneSpan.textContent = 'Done!';
+    wordEl.appendChild(doneSpan);
   }
 
   function togglePause() {
@@ -249,7 +314,7 @@ function initSpeedyReader(wpm) {
         currentWordIndex++;
         if (currentWordIndex >= words.length) {
           clearInterval(intervalId);
-          document.getElementById('speedy-word').innerHTML = '<span style="color:#ff6b35;text-shadow:0 0 8px rgba(255,107,53,0.6)">Done!</span>';
+          showDoneMessage();
           btn.textContent = 'Restart';
           isReading = false;
           return;
