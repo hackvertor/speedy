@@ -18,5 +18,16 @@
     "32": "assets/icons/logo-32.png",
     "48": "assets/icons/logo-48.png",
     "128": "assets/icons/logo-128.png"
+  },
+  "commands": {
+    "start-reading": {
+      "suggested_key": {
+        "default": "Alt+R"
+      },
+      "description": "Start speed reading"
+    }
+  },
+  "background": {
+    "service_worker": "src/background/background.js"
   }
 }
