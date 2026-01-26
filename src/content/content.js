@@ -21,6 +21,13 @@ function initSpeedyReader(wpm) {
   let currentWpm = 300;
 
   function extractText() {
+    const selection = window.getSelection();
+    const selectedText = selection.toString().trim();
+    
+    if (selectedText.length > 0) {
+      return selectedText.split(/\s+/).filter(word => word.trim().length > 0);
+    }
+
     const article = document.querySelector('article') || document.body;
     const clone = article.cloneNode(true);
 
